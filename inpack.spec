@@ -1,5 +1,5 @@
 [project]
-name = zentaopms
+name = zentao-pms
 version = 9.6.2
 vendor = zentao.net
 homepage = http://www.zentao.net
@@ -7,7 +7,6 @@ groups = app/co,app/dev
 description = Project management
 
 %build
-PREFIX="{{.project__prefix}}"
 
 cd {{.inpack__pack_dir}}/deps
 
