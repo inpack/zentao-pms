@@ -1,0 +1,73 @@
+kind = "AppSpec"
+roles = [100, 101]
+type_tags = ["devops", "enterprise"]
+
+[meta]
+  id = "zentao-pms-x1"
+  name = "禅道项目管理软件 开源版 x1"
+  version = "1.0"
+
+[[depends]]
+  id = "sysinner-mysql-x1"
+  name = "MySQL x1"
+  version = "1.0"
+
+[[depends]]
+  id = "sysinner-php74"
+  name = "PHP 7.4"
+  version = "1.0"
+
+[[depends]]
+  id = "sysinner-nginx"
+  name = "Nginx Web Server"
+  version = "1.0"
+
+[[packages]]
+  name = "zentao-pms"
+  version = "12.4"
+
+[[executors]]
+  name = "zentao-pms-main"
+  exec_start = """
+NAME=nginx
+
+if [ -f /opt/nginx/nginx/conf/conf.d/zentao-pms.conf -a pidof $NAME ]; then
+  exit 0
+fi
+
+if [ ! -d "/opt/zentao/pms" ]; then
+  mkdir -p /opt/zentao/pms
+fi
+
+rsync --exclude module/install/view/step2.html.php -av {{.inpack_prefix_zentao_pms}}/* /opt/zentao/pms/
+/home/action/.sysinner/inagent confrender --in /opt/zentao/pms/misc/zentao-pms/module__install__view__step2.html.php --out /opt/zentao/pms/module/install/view/step2.html.php
+
+if [ ! -f /opt/nginx/nginx/conf/conf.d/zentao-pms.conf ]; then
+  /home/action/.sysinner/inagent confrender --in {{.inpack_prefix_nginx_keeper}}/misc/instance-php.conf --out /opt/nginx/nginx/conf/conf.d/zentao-pms.conf --var__server__listen 8081 --var__server__root /opt/zentao/pms/www --var__location__fastcgi_pass 127.0.0.1:9000
+fi
+{{.inpack_prefix_nginx_keeper}}/bin/nginx-init restart
+"""
+  priority = 6
+
+  [executors.plan]
+    on_tick = 60
+
+[[service_ports]]
+  name = "http"
+  box_port = 8081
+  host_port = 0
+
+[exp_res]
+  cpu_min = 2
+  mem_min = 128
+  vol_min = 1
+
+[exp_deploy]
+  rep_min = 1
+  rep_max = 1
+  sys_state = 1
+
+[[urls]]
+  name = "gdoc"
+  url = "https://www.sysinner.cn/gdoc/view/app-guide/zentao-pms/x1.md"
+
