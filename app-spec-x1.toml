@@ -4,8 +4,9 @@ type_tags = ["devops", "enterprise"]
 
 [meta]
   id = "zentao-pms-x1"
-  name = "禅道项目管理软件 开源版 x1"
+  name = "禅道项目管理软件"
   version = "1.0"
+  subtitle = "专业、敏捷的研发项目管理软件"
 
 [[depends]]
   id = "sysinner-mysql-x1"
@@ -69,5 +70,5 @@ fi
 
 [[urls]]
   name = "gdoc"
-  url = "https://www.sysinner.cn/gdoc/view/app-guide/zentao-pms/x1.md"
+  url = "https://www.sysinner.cn/gdoc/view/app-guide/zentao/pms-x1.md"
 
